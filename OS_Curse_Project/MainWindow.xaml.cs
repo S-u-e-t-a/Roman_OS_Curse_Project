@@ -12,6 +12,7 @@ namespace OS_Curse_Project
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainVM();
             // тестирование всяких штук
             //todo Удалить
             var a = new MRU<int>(4);

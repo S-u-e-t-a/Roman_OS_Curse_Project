@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Gu.Wpf.DataGrid2D, Version=0.2.4.0, Culture=neutral, PublicKeyToken=34988ea4e73235be, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gu.Wpf.DataGrid2D.0.2.4\lib\net45\Gu.Wpf.DataGrid2D.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -63,16 +66,18 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CacheReplacementPolicy.cs" />
-    <Compile Include="FIFO.cs" />
-    <Compile Include="LRU.cs" />
+    <Compile Include="CacheReplacementPolicies\CacheReplacementPolicy.cs" />
+    <Compile Include="CacheReplacementPolicies\FIFO.cs" />
+    <Compile Include="CacheReplacementPolicies\LRU.cs" />
+    <Compile Include="MainVM.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MRU.cs" />
+    <Compile Include="Misc\RelayCommand.cs" />
+    <Compile Include="CacheReplacementPolicies\MRU.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -90,6 +95,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -98,5 +104,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
