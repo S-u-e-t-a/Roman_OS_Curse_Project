@@ -7,7 +7,7 @@ namespace OS_Curse_Project
         protected int CountOfPages;
 
 
-        public CacheReplacementPolicy(int countOfPages = 5)
+        public CacheReplacementPolicy(int countOfPages)
         {
             CountOfPages = countOfPages;
             Pages = new List<T>();
