@@ -2,7 +2,7 @@
 
 namespace OS_Curse_Project
 {
-    internal abstract class CacheReplacementPolicy
+    public abstract class CacheReplacementPolicy<T>
     {
         protected int CountOfPages;
 
@@ -10,13 +10,13 @@ namespace OS_Curse_Project
         public CacheReplacementPolicy(int countOfPages = 5)
         {
             CountOfPages = countOfPages;
-            Pages = new List<int>();
+            Pages = new List<T>();
         }
 
 
-        public List<int> Pages { get; }
+        public List<T> Pages { get; }
 
 
-        public abstract void AddPage(int page); //todo Переименовать более удачно
+        public abstract void AddPage(T page); //todo Переименовать более удачно
     }
 }

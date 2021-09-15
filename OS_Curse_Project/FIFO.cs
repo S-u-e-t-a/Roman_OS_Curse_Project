@@ -1,17 +1,20 @@
 ﻿namespace OS_Curse_Project
 {
-    internal class FIFO : CacheReplacementPolicy
+    public class FIFO<T> : CacheReplacementPolicy<T>
     {
         public FIFO(int countOfPages) : base(countOfPages)
         {
         }
 
 
-        public override void AddPage(int page)
+        public override void AddPage(T page)
         {
-            if (!Pages.Contains(page)) // если кэш не содержит данную страницу
+            if (Pages.Contains(page))
             {
-                if (Pages.Count < CountOfPages) // если кэш не заполнен
+            }
+            else
+            {
+                if (Pages.Count < CountOfPages)
                 {
                     Pages.Add(page);
                 }
@@ -19,7 +22,6 @@
                 {
                     Pages.RemoveAt(0);
                     Pages.Add(page);
-                    // можно было реализоовать через контейнер стека или очереди (забыл как), но так будет хуже наверное
                 }
             }
         }

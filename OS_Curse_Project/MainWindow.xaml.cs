@@ -14,14 +14,17 @@ namespace OS_Curse_Project
             InitializeComponent();
             // тестирование всяких штук
             //todo Удалить
-            var a = new FIFO(4);
-            var b = new List<int> {3, 7, 4, 2, 4, 2, 6, 1, 0, 4, 2, 8, 9, 5, 7, 4, 2, 6, 9, 2}; // тестирование всяких штук
+            var a = new LRU<int>(4);
+            var b = new List<int>
+                {3, 7, 4, 2, 4, 2, 6, 1, 0, 4, 2, 8, 9, 5, 7, 4, 2, 6, 9, 2}; // тестирование всяких штук
             foreach (var UPPER in b)
             {
                 a.AddPage(UPPER);
+                Trace.Write($"{UPPER} - ");
                 printList(a.Pages);
             }
         }
+
 
         //todo Удалить
         private void printList(List<int> l)
