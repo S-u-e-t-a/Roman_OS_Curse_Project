@@ -7,15 +7,15 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-using OxyPlot;
-using OxyPlot.Axes;
-using OxyPlot.Series;
+using LiveCharts;
+using LiveCharts.Defaults;
+using LiveCharts.Wpf;
 
 namespace OS_Curse_Project
 {
     internal class MainVM : INotifyPropertyChanged
     {
-        private PlotModel _model;
+        private SeriesCollection _seriesCollection;
         private ObservableCollection<List<char>> answerList;
 
         private CacheReplacementPolicy<char> choosenPolicy;
@@ -51,6 +51,9 @@ namespace OS_Curse_Project
                 var result = (CacheReplacementPolicy<char>) Activator.CreateInstance(target, 5);
                 Trace.WriteLine(result);
             }
+
+
+            SeriesCollection = new SeriesCollection();
         }
 
 
@@ -84,12 +87,12 @@ namespace OS_Curse_Project
             }
         }
 
-        public PlotModel Model
+        public SeriesCollection SeriesCollection
         {
-            get { return _model; }
+            get { return _seriesCollection; }
             set
             {
-                _model = value;
+                _seriesCollection = value;
                 OnPropertyChanged();
             }
         }
@@ -101,24 +104,7 @@ namespace OS_Curse_Project
                 return startCommand ??
                        (startCommand = new RelayCommand(o =>
                        {
-                           Model = new PlotModel();
-                           Model.Title = "Пример";
-                           Model.Subtitle = "ыыыыыыыыыы";
-                           Model.Axes.Add(new LinearAxis
-                           {
-                               Position = AxisPosition.Left,
-                               Minimum = 0,
-                               Maximum = 20,
-                               MajorStep = 1,
-                               MinorStep = 0.25
-                           });
-                           Model.Axes.Add(new LinearAxis
-                           {
-                               Position = AxisPosition.Bottom,
-                               Minimum = 0,
-                               Maximum = 20,
-                               MajorStep = 1
-                           });
+                           SeriesCollection = new SeriesCollection();
                            var basetype = typeof(CacheReplacementPolicy);
                            var childs = Assembly.GetAssembly(basetype).GetTypes()
                                .Where(type => type.IsSubclassOf(basetype) && !type.IsAbstract);
@@ -127,6 +113,7 @@ namespace OS_Curse_Project
                            {
                                var serie = new LineSeries();
                                serie.Title = alg.Name;
+                               serie.Values = new ChartValues<ObservablePoint>();
                                // generic List with no parameters
 
                                // To create a List<string>
@@ -143,14 +130,13 @@ namespace OS_Curse_Project
                                        policy.AddPage(page);
                                    }
 
-                                   serie.MarkerType = MarkerType.Square;
-                                   serie.Points.Add(new DataPoint(i, policy.Interuptions));
+                                   serie.Values.Add(new ObservablePoint(i, policy.Interuptions));
                                }
 
-                               Model.Series.Add(serie);
+                               SeriesCollection.Add(serie);
                            }
 
-                           OnPropertyChanged(nameof(Model));
+                           OnPropertyChanged();
                        }));
             }
         }
