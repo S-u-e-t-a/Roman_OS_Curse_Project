@@ -35,6 +35,7 @@ namespace OS_Curse_Project
                 }
                 else
                 {
+                    Interuptions += 1;
                     var indexYungest = age.IndexOf(age.Min());
                     age = age.Select(x => x + 1).ToList();
                     Pages[indexYungest] = page;

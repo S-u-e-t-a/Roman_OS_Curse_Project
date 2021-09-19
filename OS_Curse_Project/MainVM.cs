@@ -4,16 +4,18 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 using OxyPlot;
+using OxyPlot.Axes;
 using OxyPlot.Series;
 
 namespace OS_Curse_Project
 {
     internal class MainVM : INotifyPropertyChanged
-
     {
+        private PlotModel _model;
         private ObservableCollection<List<char>> answerList;
 
         private CacheReplacementPolicy<char> choosenPolicy;
@@ -22,9 +24,35 @@ namespace OS_Curse_Project
 
         private List<char> pages;
 
-        private PlotModel plotModel;
-
         private RelayCommand startCommand;
+
+
+        public MainVM()
+        {
+            var ourtype = typeof(CacheReplacementPolicy);
+            var list = Assembly.GetAssembly(ourtype).GetTypes()
+                .Where(type => type.IsSubclassOf(ourtype) && !type.IsAbstract);
+
+            foreach (var itm in list)
+            {
+                Console.WriteLine(itm);
+            }
+
+            foreach (var alg in list)
+            {
+                // generic List with no parameters
+
+                // To create a List<string>
+                Type[] tArgs = {typeof(char)};
+                var target = alg.MakeGenericType(tArgs);
+
+                // Create an instance - Activator.CreateInstance will call the default constructor.
+                // This is equivalent to calling new List<string>().
+                var result = (CacheReplacementPolicy<char>) Activator.CreateInstance(target, 5);
+                Trace.WriteLine(result);
+            }
+        }
+
 
         public ObservableCollection<List<char>> AnswerList
         {
@@ -56,12 +84,12 @@ namespace OS_Curse_Project
             }
         }
 
-        public PlotModel PlotModel
+        public PlotModel Model
         {
-            get { return plotModel; }
+            get { return _model; }
             set
             {
-                plotModel = value;
+                _model = value;
                 OnPropertyChanged();
             }
         }
@@ -73,58 +101,56 @@ namespace OS_Curse_Project
                 return startCommand ??
                        (startCommand = new RelayCommand(o =>
                        {
-                           AnswerList = new ObservableCollection<List<char>>();
-                           ChoosenPolicy = new RR<char>(5);
-                           pages = InputedPages.ToCharArray().ToList();
-                           foreach (var page in pages)
-                           {
-                               ChoosenPolicy.AddPage(page);
-                               writeInAnswerPage(page);
-                           }
-
-                           foreach (var VARIABLE in AnswerList)
-                           {
-                               foreach (var VAR in VARIABLE)
-                               {
-                                   Trace.Write($"{VAR} ");
-                               }
-
-                               Trace.WriteLine("");
-                           }
-
-                           var rnd = new Random();
-                           PlotModel = new PlotModel();
-                           /*PlotModel.Axes.Add(new LinearAxis
+                           Model = new PlotModel();
+                           Model.Title = "Пример";
+                           Model.Subtitle = "ыыыыыыыыыы";
+                           Model.Axes.Add(new LinearAxis
                            {
                                Position = AxisPosition.Left,
-                               Minimum = -0.05,
-                               Maximum = 1.05,
-                               MajorStep = 0.2,
-                               MinorStep = 0.05,
-                               TickStyle = TickStyle.Inside
+                               Minimum = 0,
+                               Maximum = 20,
+                               MajorStep = 1,
+                               MinorStep = 0.25
                            });
-                           PlotModel.Axes.Add(new LinearAxis
+                           Model.Axes.Add(new LinearAxis
                            {
                                Position = AxisPosition.Bottom,
-                               Minimum = -5.25,
-                               Maximum = 5.25,
-                               MajorStep = 1,
-                               MinorStep = 0.25,
-                               TickStyle = TickStyle.Inside
-                           });*/
-
-                           for (var i = 0; i < 3; i++)
+                               Minimum = 0,
+                               Maximum = 20,
+                               MajorStep = 1
+                           });
+                           var basetype = typeof(CacheReplacementPolicy);
+                           var childs = Assembly.GetAssembly(basetype).GetTypes()
+                               .Where(type => type.IsSubclassOf(basetype) && !type.IsAbstract);
+                           pages = InputedPages.ToCharArray().ToList();
+                           foreach (var alg in childs)
                            {
                                var serie = new LineSeries();
-                               for (var j = 0; j < 100; j++)
+                               serie.Title = alg.Name;
+                               // generic List with no parameters
+
+                               // To create a List<string>
+                               Type[] tArgs = {typeof(char)};
+                               var target = alg.MakeGenericType(tArgs);
+
+                               // Create an instance - Activator.CreateInstance will call the default constructor.
+                               // This is equivalent to calling new List<string>().
+                               for (var i = 1; i < 10; i++)
                                {
-                                   serie.Points.Add(new DataPoint(rnd.Next(0, 50), rnd.Next(0, 50)));
+                                   var policy = (CacheReplacementPolicy<char>) Activator.CreateInstance(target, i);
+                                   foreach (var page in pages)
+                                   {
+                                       policy.AddPage(page);
+                                   }
+
+                                   serie.MarkerType = MarkerType.Square;
+                                   serie.Points.Add(new DataPoint(i, policy.Interuptions));
                                }
 
-                               PlotModel.Series.Add(serie);
+                               Model.Series.Add(serie);
                            }
 
-                           OnPropertyChanged();
+                           OnPropertyChanged(nameof(Model));
                        }));
             }
         }

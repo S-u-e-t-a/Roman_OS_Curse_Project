@@ -20,6 +20,7 @@
                 }
                 else
                 {
+                    Interuptions += 1;
                     Pages.RemoveAt(0);
                     Pages.Add(page);
                 }

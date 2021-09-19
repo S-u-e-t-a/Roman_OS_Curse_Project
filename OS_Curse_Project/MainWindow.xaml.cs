@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
 
 namespace OS_Curse_Project
 {
@@ -13,7 +11,7 @@ namespace OS_Curse_Project
         {
             InitializeComponent();
             DataContext = new MainVM();
-            // тестирование всяких штук
+            /*// тестирование всяких штук
             //todo Удалить
             var a = new MRU<int>(4);
             var b = new List<int>
@@ -23,11 +21,11 @@ namespace OS_Curse_Project
                 a.AddPage(UPPER);
                 Trace.Write($"{UPPER} - ");
                 printList(a.Pages);
-            }
+            }*/
         }
 
 
-        //todo Удалить
+        /*//todo Удалить
         private void printList(List<int> l)
         {
             foreach (var UPPER in l)
@@ -36,6 +34,6 @@ namespace OS_Curse_Project
             }
 
             Trace.WriteLine(null);
-        }
+        }*/
     }
 }

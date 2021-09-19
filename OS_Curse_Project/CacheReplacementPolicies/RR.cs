@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace OS_Curse_Project
 {
@@ -27,9 +26,8 @@ namespace OS_Curse_Project
                 }
                 else
                 {
+                    Interuptions += 1;
                     var index = rnd.Next(0, CountOfPages);
-
-                    Trace.WriteLine(index);
                     Pages.RemoveAt(index);
                     Pages.Insert(index, page);
                 }
