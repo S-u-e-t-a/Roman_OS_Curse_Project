@@ -18,7 +18,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="5" />
-            <ColumnDefinition />
+            <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
         <Menu Grid.Row="0" Grid.ColumnSpan="3" />
         <Grid Grid.Row="1">
@@ -42,13 +42,23 @@
 
         <GridSplitter Grid.Column="1"  Grid.RowSpan="2" Width="5"
                       HorizontalAlignment="Center" VerticalAlignment="Stretch" />
-        <Grid Grid.Column="2" Grid.Row="1">
+
+        <TabControl Grid.Column="2" Grid.Row="1" ItemsSource="{Binding Tabs}">
+            <!--<TabControl.ContentTemplate>
+                <DataTemplate>
+                    <DataGrid>
+
+                    </DataGrid>
+                </DataTemplate>
+            </TabControl.ContentTemplate>-->
+        </TabControl>
+        <!--<Grid Grid.Column="2" Grid.Row="1">
             <ScrollViewer>
                 <DataGrid IsReadOnly="True"
                           AutoGenerateColumns="True"
                           dataGrid2D:ItemsSource.RowsSource="{Binding AnswerList}" />
             </ScrollViewer>
-        </Grid>
+        </Grid>-->
 
 
     </Grid>
