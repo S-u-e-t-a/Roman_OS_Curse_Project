@@ -46,9 +46,9 @@
         <TabControl Grid.Column="2" Grid.Row="1" ItemsSource="{Binding Tabs}">
             <!--<TabControl.ContentTemplate>
                 <DataTemplate>
-                    <DataGrid>
+                    <TabControl>
 
-                    </DataGrid>
+                    </TabControl>
                 </DataTemplate>
             </TabControl.ContentTemplate>-->
         </TabControl>

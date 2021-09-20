@@ -122,14 +122,11 @@ namespace OS_Curse_Project
                            Tabs = new ObservableCollection<TabItem>(); // окно типа мру фифо и тд
                            SeriesCollection = new SeriesCollection();
                            var basetype = typeof(CacheReplacementPolicy);
-                           var childs = Assembly.GetAssembly(basetype).GetTypes()
-                               .Where(type => type.IsSubclassOf(basetype) && !type.IsAbstract);
+                           var childs = Assembly.GetAssembly(basetype).GetTypes().Where(type => type.IsSubclassOf(basetype) && !type.IsAbstract);
                            pages = InputedPages.ToCharArray().ToList();
                            foreach (var alg in childs)
                            {
-                               var tabsItems =
-                                   new ObservableCollection<
-                                       TabItem>(); // окна типа 1,2,3,4,5 (количество страниц в кэше)
+                               var tabsItems = new ObservableCollection<TabItem>(); // окна типа 1,2,3,4,5 (количество страниц в кэше)
                                var serie = new LineSeries();
                                serie.Title = alg.Name;
                                serie.Values = new ChartValues<ObservablePoint>();
@@ -138,11 +135,12 @@ namespace OS_Curse_Project
                                for (var i = 1; i < 10; i++)
                                {
                                    var cachePages = new List<List<char>>();
-                                   cachePages.Add(new List<char>());
+
                                    var policy = (CacheReplacementPolicy<char>) Activator.CreateInstance(target, i);
                                    foreach (var page in pages)
                                    {
                                        policy.AddPage(page);
+                                       cachePages.Add(new List<char>());
                                        cachePages[cachePages.Count - 1].Add(page);
                                        foreach (var p in policy.Pages)
                                        {
@@ -151,16 +149,17 @@ namespace OS_Curse_Project
                                    }
 
                                    serie.Values.Add(new ObservablePoint(i, policy.Interuptions));
-                                   var grid = new DataGrid(); // НАРУШАЕМ ПРИНЦИПЫ MVVM??????????????/
+                                   var grid = new DataGrid(); // НАРУШАЕМ ПРИНЦИПЫ MVVM?????????????? ДА!
                                    grid.AutoGenerateColumns = true;
                                    grid.SetRowsSource(cachePages);
+                                   tabsItems.Add(new TabItem {Header = i, Content = grid});
                                }
 
                                SeriesCollection.Add(serie);
                                Tabs.Add(new TabItem
                                {
                                    Header = alg.Name,
-                                   Content = tabsItems
+                                   Content = new TabControl {ItemsSource = tabsItems}
                                });
                            }
 
