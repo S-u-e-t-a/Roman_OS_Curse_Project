@@ -80,10 +80,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CacheReplacementPolicies\CacheReplacementPolicy.cs" />
-    <Compile Include="CacheReplacementPolicies\FIFO.cs" />
-    <Compile Include="CacheReplacementPolicies\LRU.cs" />
-    <Compile Include="CacheReplacementPolicies\RR.cs" />
     <Compile Include="MainVM.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -92,7 +88,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Misc\RelayCommand.cs" />
-    <Compile Include="CacheReplacementPolicies\MRU.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -119,6 +114,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CacheReplacementPolicies\CacheReplacementPolicies.csproj">
+      <Project>{9ff0feab-e717-4f6a-bd8e-c109259b83c0}</Project>
+      <Name>CacheReplacementPolicies</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

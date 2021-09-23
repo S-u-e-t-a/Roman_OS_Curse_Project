@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 
+using CacheReplacementPolicies;
+
 using Gu.Wpf.DataGrid2D;
 
 using LiveCharts;

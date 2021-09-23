@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OS_Curse_Project", "OS_Curs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{CDF73972-7A64-48FF-9953-7CC1708EF659}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CacheReplacementPolicies", "CacheReplacementPolicies\CacheReplacementPolicies.csproj", "{9FF0FEAB-E717-4F6A-BD8E-C109259B83C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{CDF73972-7A64-48FF-9953-7CC1708EF659}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDF73972-7A64-48FF-9953-7CC1708EF659}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDF73972-7A64-48FF-9953-7CC1708EF659}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FF0FEAB-E717-4F6A-BD8E-C109259B83C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FF0FEAB-E717-4F6A-BD8E-C109259B83C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FF0FEAB-E717-4F6A-BD8E-C109259B83C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FF0FEAB-E717-4F6A-BD8E-C109259B83C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

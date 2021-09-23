@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace OS_Curse_Project
+namespace CacheReplacementPolicies
 {
-    internal class MRU<T> : CacheReplacementPolicy<T>
+    internal class LRU<T> : CacheReplacementPolicy<T>
     {
         private List<int> age;
 
 
-        public MRU(int countOfPages) : base(countOfPages)
+        public LRU(int countOfPages) : base(countOfPages)
         {
             age = new List<int>();
             for (var i = 0; i < CountOfPages; i++)
@@ -36,10 +36,10 @@ namespace OS_Curse_Project
                 else
                 {
                     Interuptions += 1;
-                    var indexYungest = age.IndexOf(age.Min());
+                    var indexOldest = age.IndexOf(age.Max());
                     age = age.Select(x => x + 1).ToList();
-                    Pages[indexYungest] = page;
-                    age[indexYungest] = 0;
+                    Pages[indexOldest] = page;
+                    age[indexOldest] = 0;
                 }
             }
         }

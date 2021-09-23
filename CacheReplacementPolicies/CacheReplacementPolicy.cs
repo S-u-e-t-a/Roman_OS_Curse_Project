@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OS_Curse_Project
+namespace CacheReplacementPolicies
 {
     public abstract class CacheReplacementPolicy // так надо
     {

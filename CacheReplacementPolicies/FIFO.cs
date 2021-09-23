@@ -1,15 +1,9 @@
-﻿using System;
-
-namespace OS_Curse_Project
+﻿namespace CacheReplacementPolicies
 {
-    public class RR<T> : CacheReplacementPolicy<T>
+    public class FIFO<T> : CacheReplacementPolicy<T>
     {
-        private readonly Random rnd;
-
-
-        public RR(int countOfPages) : base(countOfPages)
+        public FIFO(int countOfPages) : base(countOfPages)
         {
-            rnd = new Random();
         }
 
 
@@ -27,9 +21,8 @@ namespace OS_Curse_Project
                 else
                 {
                     Interuptions += 1;
-                    var index = rnd.Next(0, CountOfPages);
-                    Pages.RemoveAt(index);
-                    Pages.Insert(index, page);
+                    Pages.RemoveAt(0);
+                    Pages.Add(page);
                 }
             }
         }
