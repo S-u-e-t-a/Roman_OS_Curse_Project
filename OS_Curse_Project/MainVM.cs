@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Controls;
 
 using CacheReplacementPolicies;
@@ -28,6 +29,9 @@ namespace OS_Curse_Project
         private CacheReplacementPolicy<char> choosenPolicy;
 
         private string inputedPages;
+        private int maxPage;
+
+        private int minPage;
 
         private List<char> pages;
 
@@ -36,6 +40,9 @@ namespace OS_Curse_Project
 
         public MainVM()
         {
+            MinPage = 2;
+            MaxPage = 10;
+
             var ourtype = typeof(CacheReplacementPolicy);
             var list = Assembly.GetAssembly(ourtype).GetTypes()
                 .Where(type => type.IsSubclassOf(ourtype) && !type.IsAbstract);
@@ -61,6 +68,36 @@ namespace OS_Curse_Project
 
 
             SeriesCollection = new SeriesCollection();
+        }
+
+
+        public int MinPage
+        {
+            get { return minPage; }
+            set
+            {
+                minPage = value;
+                OnPropertyChanged();
+
+                if (MinPage > MaxPage)
+                {
+                    MaxPage = MinPage;
+                }
+            }
+        }
+
+        public int MaxPage
+        {
+            get { return maxPage; }
+            set
+            {
+                maxPage = value;
+                OnPropertyChanged();
+                if (MaxPage < MinPage)
+                {
+                    MinPage = MaxPage;
+                }
+            }
         }
 
 
@@ -121,66 +158,93 @@ namespace OS_Curse_Project
                 return startCommand ??
                        (startCommand = new RelayCommand(o =>
                        {
-                           Tabs = new ObservableCollection<TabItem>(); // окно типа мру фифо и тд
-                           SeriesCollection = new SeriesCollection();
-                           var basetype = typeof(CacheReplacementPolicy);
-                           var childs = Assembly.GetAssembly(basetype).GetTypes().Where(type => type.IsSubclassOf(basetype) && !type.IsAbstract);
-                           pages = InputedPages.ToCharArray().ToList();
-                           foreach (var alg in childs)
+                           if (!isDataCorrect())
                            {
-                               var tabsItems = new ObservableCollection<TabItem>(); // окна типа 1,2,3,4,5 (количество страниц в кэше)
-                               var serie = new LineSeries();
-                               serie.Title = alg.Name;
-                               serie.Values = new ChartValues<ObservablePoint>();
-                               Type[] tArgs = {typeof(char)};
-                               var target = alg.MakeGenericType(tArgs);
-                               for (var i = 1; i < 10; i++)
+                               MessageBox.Show("Введены некорректные данные, попробуйте снова", "Ошибка", MessageBoxButton.OK);
+                           }
+                           else
+                           {
+                               Tabs = new ObservableCollection<TabItem>(); // окно типа мру фифо и тд
+                               SeriesCollection = new SeriesCollection();
+                               var basetype = typeof(CacheReplacementPolicy);
+                               var childs = Assembly.GetAssembly(basetype).GetTypes().Where(type => type.IsSubclassOf(basetype) && !type.IsAbstract);
+                               pages = InputedPages.ToCharArray().ToList();
+                               foreach (var alg in childs)
                                {
-                                   var cachePages = new List<List<char>>();
-
-                                   var policy = (CacheReplacementPolicy<char>) Activator.CreateInstance(target, i);
-                                   foreach (var page in pages)
+                                   var tabsItems = new ObservableCollection<TabItem>(); // окна типа 1,2,3,4,5 (количество страниц в кэше)
+                                   var serie = new LineSeries();
+                                   serie.Title = alg.Name;
+                                   serie.Values = new ChartValues<ObservablePoint>();
+                                   Type[] tArgs = {typeof(char)};
+                                   var target = alg.MakeGenericType(tArgs);
+                                   for (var i = MinPage; i < MaxPage + 1; i++)
                                    {
-                                       policy.AddPage(page);
-                                       cachePages.Add(new List<char>());
-                                       cachePages[cachePages.Count - 1].Add(page);
-                                       foreach (var p in policy.Pages)
+                                       var cachePages = new List<List<char>>();
+
+                                       var policy = (CacheReplacementPolicy<char>) Activator.CreateInstance(target, i);
+                                       foreach (var page in pages)
                                        {
-                                           cachePages[cachePages.Count - 1].Add(p);
+                                           policy.AddPage(page);
+                                           cachePages.Add(new List<char>());
+                                           cachePages[cachePages.Count - 1].Add(page);
+                                           foreach (var p in policy.Pages)
+                                           {
+                                               cachePages[cachePages.Count - 1].Add(p);
+                                           }
                                        }
+
+                                       serie.Values.Add(new ObservablePoint(i, policy.Interuptions));
+                                       var grid = new DataGrid(); // НАРУШАЕМ ПРИНЦИПЫ MVVM?????????????? ДА!
+                                       grid.AutoGenerateColumns = true;
+                                       grid.SetRowsSource(cachePages);
+                                       tabsItems.Add(new TabItem {Header = i, Content = grid});
                                    }
 
-                                   serie.Values.Add(new ObservablePoint(i, policy.Interuptions));
-                                   var grid = new DataGrid(); // НАРУШАЕМ ПРИНЦИПЫ MVVM?????????????? ДА!
-                                   grid.AutoGenerateColumns = true;
-                                   grid.SetRowsSource(cachePages);
-                                   tabsItems.Add(new TabItem {Header = i, Content = grid});
+                                   SeriesCollection.Add(serie);
+                                   Tabs.Add(new TabItem
+                                   {
+                                       Header = alg.Name,
+                                       Content = new TabControl {ItemsSource = tabsItems}
+                                   });
                                }
 
-                               SeriesCollection.Add(serie);
-                               Tabs.Add(new TabItem
-                               {
-                                   Header = alg.Name,
-                                   Content = new TabControl {ItemsSource = tabsItems}
-                               });
+                               OnPropertyChanged();
                            }
-
-                           OnPropertyChanged();
                        }));
             }
         }
 
 
-        private void writeInAnswerPage(char page)
+        private bool isDataCorrect()
         {
-            var l = new List<char>();
-            l.Add(page);
-            foreach (var p in ChoosenPolicy.Pages)
+            if (isBordersCorrect() && isPagesCorrect())
             {
-                l.Add(p);
+                return true;
             }
 
-            answerList.Add(l);
+            return false;
+        }
+
+
+        private bool isBordersCorrect()
+        {
+            if ((MinPage < MaxPage) && (MinPage > 0))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
+        private bool isPagesCorrect()
+        {
+            if (InputedPages != null)
+            {
+                return true;
+            }
+
+            return false;
         }
 
 
