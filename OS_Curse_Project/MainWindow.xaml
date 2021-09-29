@@ -18,7 +18,11 @@
             <ColumnDefinition Width="5" />
             <ColumnDefinition Width="200" />
         </Grid.ColumnDefinitions>
-        <Menu Grid.Row="0" Grid.ColumnSpan="3" />
+        <Menu Grid.Row="0" Grid.ColumnSpan="3">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Импорт PDF" Click="MenuItem_OnClick"> </MenuItem>
+            </MenuItem>
+        </Menu>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="20" />
@@ -35,12 +39,12 @@
             </StackPanel>
 
 
-            <lvc:CartesianChart Grid.Row="2" Series="{Binding SeriesCollection}" LegendLocation="Right">
+            <lvc:CartesianChart x:Name="Chart123" Grid.Row="2" Series="{Binding SeriesCollection}" LegendLocation="Right">
                 <lvc:CartesianChart.AxisY>
-                    <lvc:Axis Title="Sales" LabelFormatter="{Binding YFormatter}" />
+                    <lvc:Axis Title="Количество прерываний"/>
                 </lvc:CartesianChart.AxisY>
                 <lvc:CartesianChart.AxisX>
-                    <lvc:Axis Title="Month" Labels="{Binding Labels}" />
+                    <lvc:Axis Title="Количество страниц в кэше" />
                 </lvc:CartesianChart.AxisX>
             </lvc:CartesianChart>
 

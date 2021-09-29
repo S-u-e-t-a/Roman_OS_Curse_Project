@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace OS_Curse_Project
 {
@@ -10,30 +13,47 @@ namespace OS_Curse_Project
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainVM();
-            /*// тестирование всяких штук
-            //todo Удалить
-            var a = new MRU<int>(4);
-            var b = new List<int>
-                {3, 7, 4, 2, 4, 2, 6, 1, 0, 4, 2, 8, 9, 5, 7, 4, 2, 6, 9, 2}; // тестирование всяких штук
-            foreach (var UPPER in b)
-            {
-                a.AddPage(UPPER);
-                Trace.Write($"{UPPER} - ");
-                printList(a.Pages);
-            }*/
+            DataContext = new MainVM(); // очень сильно нарушили mvvm
         }
 
 
-        /*//todo Удалить
-        private void printList(List<int> l)
+        public BitmapSource GetPngGraphImage(FrameworkElement visual)
         {
-            foreach (var UPPER in l)
-            {
-                Trace.Write($"{UPPER} ");
-            }
+            var encoder = new PngBitmapEncoder();
 
-            Trace.WriteLine(null);
-        }*/
+            return new BitmapImage();
+        }
+
+
+        public byte[] EncodeVisual(int dpi)
+        {
+            var visual = Chart123;
+            var bitmap = new RenderTargetBitmap(((int) visual.ActualWidth * dpi) / 96, (((int) visual.ActualHeight + 50) * dpi) / 96, dpi, dpi
+                , PixelFormats.Pbgra32);
+            bitmap.Render(visual);
+            var frame = BitmapFrame.Create(bitmap);
+            var encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(frame);
+            //using (var stream = File.Create("fileName.png"))
+            //{
+            //    encoder.Save(stream);
+            //}
+
+            //return new byte[5];
+            using (var stream = new MemoryStream())
+            {
+                encoder.Save(stream);
+                var bit = stream.ToArray();
+                stream.Close();
+
+                return bit;
+            }
+        }
+
+
+        private void MenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            FileSystem.test(EncodeVisual(300));
+        }
     }
 }
