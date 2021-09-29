@@ -2,8 +2,6 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using OS_Curse_Project;
-
 namespace Tests
 {
     [TestClass]

@@ -1,6 +1,7 @@
 ﻿using iText.IO.Font;
 using iText.IO.Image;
 using iText.Kernel.Font;
+using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
@@ -23,11 +24,21 @@ namespace OS_Curse_Project
                 .SetFontSize(20);
             document.SetFont(font);
             var image = new Image(ImageDataFactory.Create(bitmap)).SetTextAlignment(TextAlignment.CENTER);
-            //var scaler = (document.GetPageEffectiveArea(PageSize.A4).GetWidth() - document.GetLeftMargin()
-            //                                                                    - document.GetRightMargin()) / image.GetImageWidth();
+            var widthscaler = (document.GetPageEffectiveArea(PageSize.A4).GetWidth() - document.GetLeftMargin() - document.GetRightMargin()) / image.GetImageWidth();
+            var heighscaler = (document.GetPageEffectiveArea(PageSize.A4).GetHeight() - document.GetTopMargin() - document.GetBottomMargin()) / image.GetImageHeight();
+            float scaler;
+            if (widthscaler < heighscaler)
+            {
+                scaler = widthscaler;
+            }
+            else
+            {
+                scaler = heighscaler;
+            }
+
             //Trace.WriteLine(scaler);
-            //image.Scale(0.1f, 0.1f);
-            //image.Scale(scaler, scaler);
+            //image.Scale(0.2f, 0.2f);
+            image.Scale(scaler, scaler);
             document.Add(header);
             document.Add(image);
             document.Close();

@@ -21,22 +21,7 @@ namespace OS_Curse_Project
 {
     internal class MainVM : INotifyPropertyChanged
     {
-        private SeriesCollection _seriesCollection;
-
-        private ObservableCollection<TabItem> _tabs;
-        private ObservableCollection<List<char>> answerList;
-
-        private CacheReplacementPolicy<char> choosenPolicy;
-
-        private string inputedPages;
-        private int maxPage;
-
-        private int minPage;
-
-        private List<char> pages;
-
-        private RelayCommand startCommand;
-
+        #region Constructors
 
         public MainVM()
         {
@@ -70,6 +55,104 @@ namespace OS_Curse_Project
             SeriesCollection = new SeriesCollection();
         }
 
+        #endregion
+
+
+        #region Commands
+
+        public RelayCommand StartCommand
+        {
+            get
+            {
+                return startCommand ??
+                       (startCommand = new RelayCommand(o =>
+                       {
+                           if (!isDataCorrect())
+                           {
+                               MessageBox.Show("Введены некорректные данные, попробуйте снова", "Ошибка", MessageBoxButton.OK);
+                           }
+                           else
+                           {
+                               Tabs = new ObservableCollection<TabItem>(); // окно типа мру фифо и тд
+                               SeriesCollection = new SeriesCollection();
+                               var basetype = typeof(CacheReplacementPolicy);
+                               var childs = Assembly.GetAssembly(basetype).GetTypes().Where(type => type.IsSubclassOf(basetype) && !type.IsAbstract);
+                               pages = InputedPages.ToCharArray().ToList();
+                               foreach (var alg in childs)
+                               {
+                                   var tabsItems = new ObservableCollection<TabItem>(); // окна типа 1,2,3,4,5 (количество страниц в кэше)
+                                   var serie = new LineSeries();
+                                   serie.Title = alg.Name;
+                                   serie.Values = new ChartValues<ObservablePoint>();
+                                   Type[] tArgs = {typeof(char)};
+                                   var target = alg.MakeGenericType(tArgs);
+                                   for (var i = MinPage; i < MaxPage + 1; i++)
+                                   {
+                                       var cachePages = new List<List<char>>();
+                                       var headers = new List<string> {"Добавлена"};
+                                       var policy = (CacheReplacementPolicy<char>) Activator.CreateInstance(target, i);
+                                       foreach (var page in pages)
+                                       {
+                                           policy.AddPage(page);
+                                           cachePages.Add(new List<char>());
+                                           cachePages[cachePages.Count - 1].Add(page);
+                                           foreach (var p in policy.Pages)
+                                           {
+                                               cachePages[cachePages.Count - 1].Add(p);
+                                           }
+                                       }
+
+                                       for (var j = 1; j < cachePages[0].Count; j++)
+                                       {
+                                           headers.Add($"C{j}");
+                                       }
+
+                                       serie.Values.Add(new ObservablePoint(i, policy.Interuptions));
+                                       var grid = new DataGrid(); // НАРУШАЕМ ПРИНЦИПЫ MVVM?????????????? ДА!
+                                       grid.SetRowsSource(cachePages);
+                                       grid.SetColumnHeadersSource(headers);
+                                       tabsItems.Add(new TabItem {Header = i, Content = grid});
+                                   }
+
+                                   SeriesCollection.Add(serie);
+                                   Tabs.Add(new TabItem
+                                   {
+                                       Header = alg.Name,
+                                       Content = new TabControl {ItemsSource = tabsItems}
+                                   });
+                               }
+
+                               OnPropertyChanged();
+                           }
+                       }));
+            }
+        }
+
+        #endregion
+
+
+        #region Fields
+
+        private SeriesCollection _seriesCollection;
+
+        private ObservableCollection<TabItem> _tabs;
+        private ObservableCollection<List<char>> answerList;
+
+        private CacheReplacementPolicy<char> choosenPolicy;
+
+        private string inputedPages;
+        private int maxPage;
+
+        private int minPage;
+
+        private List<char> pages;
+
+        private RelayCommand startCommand;
+
+        #endregion
+
+
+        #region Properties
 
         public int MinPage
         {
@@ -151,69 +234,10 @@ namespace OS_Curse_Project
             }
         }
 
-        public RelayCommand StartCommand
-        {
-            get
-            {
-                return startCommand ??
-                       (startCommand = new RelayCommand(o =>
-                       {
-                           if (!isDataCorrect())
-                           {
-                               MessageBox.Show("Введены некорректные данные, попробуйте снова", "Ошибка", MessageBoxButton.OK);
-                           }
-                           else
-                           {
-                               Tabs = new ObservableCollection<TabItem>(); // окно типа мру фифо и тд
-                               SeriesCollection = new SeriesCollection();
-                               var basetype = typeof(CacheReplacementPolicy);
-                               var childs = Assembly.GetAssembly(basetype).GetTypes().Where(type => type.IsSubclassOf(basetype) && !type.IsAbstract);
-                               pages = InputedPages.ToCharArray().ToList();
-                               foreach (var alg in childs)
-                               {
-                                   var tabsItems = new ObservableCollection<TabItem>(); // окна типа 1,2,3,4,5 (количество страниц в кэше)
-                                   var serie = new LineSeries();
-                                   serie.Title = alg.Name;
-                                   serie.Values = new ChartValues<ObservablePoint>();
-                                   Type[] tArgs = {typeof(char)};
-                                   var target = alg.MakeGenericType(tArgs);
-                                   for (var i = MinPage; i < MaxPage + 1; i++)
-                                   {
-                                       var cachePages = new List<List<char>>();
+        #endregion
 
-                                       var policy = (CacheReplacementPolicy<char>) Activator.CreateInstance(target, i);
-                                       foreach (var page in pages)
-                                       {
-                                           policy.AddPage(page);
-                                           cachePages.Add(new List<char>());
-                                           cachePages[cachePages.Count - 1].Add(page);
-                                           foreach (var p in policy.Pages)
-                                           {
-                                               cachePages[cachePages.Count - 1].Add(p);
-                                           }
-                                       }
 
-                                       serie.Values.Add(new ObservablePoint(i, policy.Interuptions));
-                                       var grid = new DataGrid(); // НАРУШАЕМ ПРИНЦИПЫ MVVM?????????????? ДА!
-                                       grid.AutoGenerateColumns = true;
-                                       grid.SetRowsSource(cachePages);
-                                       tabsItems.Add(new TabItem {Header = i, Content = grid});
-                                   }
-
-                                   SeriesCollection.Add(serie);
-                                   Tabs.Add(new TabItem
-                                   {
-                                       Header = alg.Name,
-                                       Content = new TabControl {ItemsSource = tabsItems}
-                                   });
-                               }
-
-                               OnPropertyChanged();
-                           }
-                       }));
-            }
-        }
-
+        #region Functions
 
         private bool isDataCorrect()
         {
@@ -246,6 +270,8 @@ namespace OS_Curse_Project
 
             return false;
         }
+
+        #endregion
 
 
         #region PropertyChanged
