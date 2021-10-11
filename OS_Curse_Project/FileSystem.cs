@@ -1,4 +1,6 @@
-﻿using iText.IO.Font;
+﻿using System.Collections.Generic;
+
+using iText.IO.Font;
 using iText.IO.Image;
 using iText.Kernel.Font;
 using iText.Kernel.Geom;
@@ -11,7 +13,7 @@ namespace OS_Curse_Project
 {
     internal static class FileSystem
     {
-        public static void test(byte[] bitmap)
+        public static void importPdf(byte[] bitmap, Dictionary<string, Dictionary<int, List<List<char>>>> results)
         {
             // Must have write permissions to the path folder
             var writer = new PdfWriter("demo.pdf");
@@ -41,12 +43,44 @@ namespace OS_Curse_Project
             image.Scale(scaler, scaler);
             document.Add(header);
             document.Add(image);
+            foreach (var alg in results)
+            {
+                foreach (var result in alg.Value)
+                {
+                    var countOfCells = result.Key + 2;
+                    var table = new Table(UnitValue.CreatePercentArray(countOfCells)).UseAllAvailableWidth();
+                    document.Add(new Paragraph($"Алгоритм — {alg.Key}, количество страничных блоков — {result.Key}"));
+                    table.AddHeaderCell("Прерывание");
+                    table.AddHeaderCell("Добавленный блок");
+                    for (var i = 1; i < countOfCells - 1; i++)
+                    {
+                        table.AddHeaderCell($"С{i}");
+                    }
+
+                    foreach (var chars in result.Value)
+                    {
+                        var cells = new List<Cell>();
+                        for (var i = 0; i < countOfCells; i++)
+                        {
+                            cells.Add(new Cell());
+                        }
+
+                        for (var i = 0; i < chars.Count; i++)
+                        {
+                            cells[i].Add(new Paragraph(chars[i].ToString()));
+                        }
+
+                        foreach (var cell in cells)
+                        {
+                            table.AddCell(cell);
+                        }
+                    }
+
+                    document.Add(table);
+                }
+            }
+
             document.Close();
-        }
-
-
-        public static void importPdf()
-        {
         }
     }
 }

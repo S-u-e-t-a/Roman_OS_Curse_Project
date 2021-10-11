@@ -73,6 +73,7 @@ namespace OS_Curse_Project
                            }
                            else
                            {
+                               results = new Dictionary<string, Dictionary<int, List<List<char>>>>();
                                Tabs = new ObservableCollection<TabItem>(); // окно типа мру фифо и тд
                                SeriesCollection = new SeriesCollection();
                                var basetype = typeof(CacheReplacementPolicy);
@@ -80,21 +81,36 @@ namespace OS_Curse_Project
                                pages = InputedPages.ToCharArray().ToList();
                                foreach (var alg in childs)
                                {
+                                   var name = alg.Name.Split('`')[0];
+                                   results[name] = new Dictionary<int, List<List<char>>>();
                                    var tabsItems = new ObservableCollection<TabItem>(); // окна типа 1,2,3,4,5 (количество страниц в кэше)
                                    var serie = new LineSeries();
-                                   serie.Title = alg.Name;
+                                   serie.Title = name;
                                    serie.Values = new ChartValues<ObservablePoint>();
                                    Type[] tArgs = {typeof(char)};
                                    var target = alg.MakeGenericType(tArgs);
                                    for (var i = MinPage; i < MaxPage + 1; i++)
                                    {
                                        var cachePages = new List<List<char>>();
-                                       var headers = new List<string> {"Добавлена"};
+                                       var headers = new List<string> {"П", "Добавлена"};
                                        var policy = (CacheReplacementPolicy<char>) Activator.CreateInstance(target, i);
                                        foreach (var page in pages)
                                        {
+                                           var interuptions = policy.Interuptions;
                                            policy.AddPage(page);
                                            cachePages.Add(new List<char>());
+                                           char interupt;
+                                           // тут стоило сделать событие при изменении количества прерываний, но это надо все перелопачивать, а мне лень
+                                           if (interuptions != policy.Interuptions)
+                                           {
+                                               interupt = 'П';
+                                           }
+                                           else
+                                           {
+                                               interupt = ' ';
+                                           }
+
+                                           cachePages[cachePages.Count - 1].Add(interupt);
                                            cachePages[cachePages.Count - 1].Add(page);
                                            foreach (var p in policy.Pages)
                                            {
@@ -102,7 +118,8 @@ namespace OS_Curse_Project
                                            }
                                        }
 
-                                       for (var j = 1; j < cachePages[0].Count; j++)
+                                       results[name][i] = cachePages.ToList();
+                                       for (var j = 1; j < cachePages.Last().Count - 1; j++)
                                        {
                                            headers.Add($"C{j}");
                                        }
@@ -117,7 +134,7 @@ namespace OS_Curse_Project
                                    SeriesCollection.Add(serie);
                                    Tabs.Add(new TabItem
                                    {
-                                       Header = alg.Name,
+                                       Header = name,
                                        Content = new TabControl {ItemsSource = tabsItems}
                                    });
                                }
@@ -133,10 +150,12 @@ namespace OS_Curse_Project
 
         #region Fields
 
+        public Dictionary<string, Dictionary<int, List<List<char>>>> results;
+
         private SeriesCollection _seriesCollection;
 
         private ObservableCollection<TabItem> _tabs;
-        private ObservableCollection<List<char>> answerList;
+        private ObservableCollection<List<List<char>>> answerList;
 
         private CacheReplacementPolicy<char> choosenPolicy;
 
@@ -184,7 +203,7 @@ namespace OS_Curse_Project
         }
 
 
-        public ObservableCollection<List<char>> AnswerList
+        public ObservableCollection<List<List<char>>> AnswerList
         {
             get { return answerList; }
             set

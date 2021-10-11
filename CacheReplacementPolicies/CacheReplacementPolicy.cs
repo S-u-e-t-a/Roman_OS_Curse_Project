@@ -2,7 +2,7 @@
 
 namespace CacheReplacementPolicies
 {
-    public abstract class CacheReplacementPolicy // так надо
+    public abstract class CacheReplacementPolicy // так надоЫ
     {
         //надо чтобы получить от этого класса детей, потому что от класса с дженериком е получить нормально, ну или я не нашел как (я искал)
     }

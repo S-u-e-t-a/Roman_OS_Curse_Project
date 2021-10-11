@@ -20,13 +20,13 @@ namespace CacheReplacementPolicies
             }
             else
             {
+                Interuptions += 1;
                 if (Pages.Count < CountOfPages)
                 {
                     Pages.Add(page);
                 }
                 else
                 {
-                    Interuptions += 1;
                     var index = rnd.Next(0, CountOfPages);
                     Pages.RemoveAt(index);
                     Pages.Insert(index, page);

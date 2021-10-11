@@ -42,11 +42,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheReplacementPolicy.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="FIFO.cs" />
     <Compile Include="LRU.cs" />
     <Compile Include="MRU.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RR.cs" />
+    <Compile Include="SecondChance.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

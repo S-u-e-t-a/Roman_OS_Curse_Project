@@ -34,11 +34,11 @@
                 <Label Content="Количество страниц: От" />
                 <xctk:IntegerUpDown Width="50"
                                     Text="{Binding MinPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    Minimum="1" />
+                                    Minimum="1" Maximum="19" />
                 <Label Content="До" />
                 <xctk:IntegerUpDown Width="50"
                                     Text="{Binding MaxPage,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    Minimum="1" />
+                                    Minimum="1" Maximum="19" />
                 <Button Content="Провести анализ" Command="{Binding StartCommand}" />
             </StackPanel>
 

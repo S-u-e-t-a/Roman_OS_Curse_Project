@@ -14,13 +14,13 @@
             }
             else
             {
+                Interuptions += 1;
                 if (Pages.Count < CountOfPages)
                 {
                     Pages.Add(page);
                 }
                 else
                 {
-                    Interuptions += 1;
                     Pages.RemoveAt(0);
                     Pages.Add(page);
                 }

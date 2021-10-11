@@ -27,6 +27,7 @@ namespace CacheReplacementPolicies
             }
             else // если страницы нет
             {
+                Interuptions += 1;
                 if (Pages.Count < CountOfPages)
                 {
                     Pages.Add(page);
@@ -35,7 +36,6 @@ namespace CacheReplacementPolicies
                 }
                 else
                 {
-                    Interuptions += 1;
                     var indexOldest = age.IndexOf(age.Max());
                     age = age.Select(x => x + 1).ToList();
                     Pages[indexOldest] = page;

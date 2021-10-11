@@ -53,7 +53,7 @@ namespace OS_Curse_Project
 
         private void MenuItem_OnClick(object sender, RoutedEventArgs e)
         {
-            FileSystem.test(EncodeVisual(300));
+            FileSystem.importPdf(EncodeVisual(300), (DataContext as MainVM).results);
         }
     }
 }
