@@ -20,8 +20,11 @@
         </Grid.ColumnDefinitions>
         <Menu Grid.Row="0" Grid.ColumnSpan="3">
             <MenuItem Header="Файл">
-                <MenuItem Header="Импорт PDF" Click="MenuItem_OnClick" />
+                <MenuItem Header="Сохранить в PDF" Click="MenuItem_OnClick" />
+                <MenuItem Header="Сохранить начальные данные в файл" Command="{Binding SaveInitialData}" />
+                <MenuItem Header="Получить начальные данные из файла" Command="{Binding ReadInitialData}" />
             </MenuItem>
+            <MenuItem Header="Справка" Command="{Binding ShowHelp}" />
         </Menu>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>

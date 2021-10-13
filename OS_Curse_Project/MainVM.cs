@@ -17,6 +17,8 @@ using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 
+using Microsoft.Win32;
+
 namespace OS_Curse_Project
 {
     internal class MainVM : INotifyPropertyChanged
@@ -59,6 +61,75 @@ namespace OS_Curse_Project
 
 
         #region Commands
+
+        private RelayCommand showHelp;
+
+        public RelayCommand ShowHelp
+        {
+            get
+            {
+                return showHelp ?? (showHelp = new RelayCommand(o =>
+                {
+                    var help = new HelpWIndow();
+                    help.ShowDialog();
+                }));
+            }
+        }
+
+        private RelayCommand saveInitialData;
+
+        public RelayCommand SaveInitialData
+        {
+            get
+            {
+                return saveInitialData ?? (saveInitialData = new RelayCommand(o =>
+                {
+                    var dlg = new SaveFileDialog();
+                    dlg.DefaultExt = ".txt";
+                    dlg.FileName = "Начальные данные_" + DateTime.Now.ToString().Replace(':', '_');
+                    var res = dlg.ShowDialog();
+                    if (res == true)
+                    {
+                        var data = InputedPages + "\n" + MinPage + "\n" + MaxPage;
+                        FileSystem.SaveToFile(dlg.FileName, data);
+                    }
+                }));
+            }
+        }
+
+        private RelayCommand readInitialData;
+
+        public RelayCommand ReadInitialData
+        {
+            get
+            {
+                return readInitialData ?? (readInitialData = new RelayCommand(o =>
+                {
+                    var dlg = new OpenFileDialog();
+                    dlg.DefaultExt = ".txt";
+                    var res = dlg.ShowDialog();
+                    if (res == true)
+                    {
+                        var data = FileSystem.ReadFromFile(dlg.FileName);
+                        if (data.Count != 3)
+                        {
+                            MessageBox.Show(
+                                "Ошибка, в файле неправильное количество данных," +
+                                " убедитесь что внутри файла находится строка с симоволами," +
+                                " строка с минимальным количеством страниц и" +
+                                " строка с максимальным количеством страниц",
+                                "Ошибка чтения", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        else
+                        {
+                            InputedPages = data[0];
+                            MinPage = int.Parse(data[1]);
+                            MaxPage = int.Parse(data[2]);
+                        }
+                    }
+                }));
+            }
+        }
 
         public RelayCommand StartCommand
         {

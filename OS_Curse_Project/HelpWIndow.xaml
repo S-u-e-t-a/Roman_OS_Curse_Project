@@ -1,0 +1,18 @@
+﻿<Window x:Class="OS_Curse_Project.HelpWIndow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="HelpWIndow" Height="170" Width="500">
+    <Grid>
+        <TextBlock TextWrapping="Wrap">
+            Курсовой проект по ОС <LineBreak />
+            Автор: Хлебников Роман 494 группа <LineBreak />
+            Данная программа позвояет произвести анализ алгоритмой замещения страниц таких как FIFO, LRU, RR, MRU,
+            При вводе строки с порядком вызова страничных блоков пользователь может выбрать количество страничных блоков в кэше и
+            далее с помощью графиков проанализровать эффективность описанных алгоритмов.
+            После анализа пользователь может сохранить результаты работы — записать начальные данные в текстовый файл и сохранить результаты работы в файл в формате PDF.
+        </TextBlock>
+    </Grid>
+</Window>

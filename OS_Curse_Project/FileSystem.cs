@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 using iText.IO.Font;
 using iText.IO.Image;
@@ -13,10 +16,9 @@ namespace OS_Curse_Project
 {
     internal static class FileSystem
     {
-        public static void importPdf(byte[] bitmap, Dictionary<string, Dictionary<int, List<List<char>>>> results)
+        public static void exportPdf(string path, byte[] bitmap, Dictionary<string, Dictionary<int, List<List<char>>>> results)
         {
-            // Must have write permissions to the path folder
-            var writer = new PdfWriter("demo.pdf");
+            var writer = new PdfWriter(path);
             var pdf = new PdfDocument(writer);
             var document = new Document(pdf);
             var FONT_FILENAME = "../../resources/Times_New_Roman.ttf";
@@ -81,6 +83,25 @@ namespace OS_Curse_Project
             }
 
             document.Close();
+        }
+
+
+        public static void SaveToFile(string path, string text)
+        {
+            var fileWriter = new StreamWriter(path);
+            fileWriter.WriteLine(text);
+            fileWriter.Close();
+        }
+
+
+        public static List<string> ReadFromFile(string path)
+        {
+            string[] stringSeparators = {"\r", "\n", "\t"};
+            var lines = File.ReadAllText(path)
+                .Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries) // разбиваем строку по указанным символам
+                .ToList(); // преобразуем результат в список
+
+            return lines;
         }
     }
 }
