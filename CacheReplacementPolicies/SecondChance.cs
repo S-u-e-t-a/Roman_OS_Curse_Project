@@ -25,11 +25,11 @@ namespace CacheReplacementPolicies
             }
             else
             {
-                Interuptions += 1;
                 if (Pages.Count < CountOfPages)
                 {
                     Pages.Add(page);
                     rbits[Pages.IndexOf(page)] = 1;
+                    Interuptions += 1;
                 }
                 else
                 {
@@ -37,6 +37,7 @@ namespace CacheReplacementPolicies
                     {
                         Pages.RemoveAt(0);
                         Pages.Add(page);
+                        Interuptions += 1;
                     }
                     else
                     {
