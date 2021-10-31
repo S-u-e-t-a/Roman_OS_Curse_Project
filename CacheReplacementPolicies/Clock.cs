@@ -2,12 +2,13 @@
 
 namespace CacheReplacementPolicies
 {
-    internal class SecondChance<T> : CacheReplacementPolicy<T>
+    internal class Clock<T> : CacheReplacementPolicy<T>
     {
         private readonly List<int> rbits;
+        private int _clockArrow;
 
 
-        public SecondChance(int countOfPages) : base(countOfPages)
+        public Clock(int countOfPages) : base(countOfPages)
         {
             rbits = new List<int>();
             for (var i = 0; i < CountOfPages; i++)
@@ -17,11 +18,26 @@ namespace CacheReplacementPolicies
         }
 
 
+        private int ClockArrow
+        {
+            get { return _clockArrow; }
+            set
+            {
+                _clockArrow = value;
+                if (_clockArrow == CountOfPages)
+                {
+                    _clockArrow = 0;
+                }
+            }
+        }
+
+
         public override void AddPage(T page)
         {
             if (Pages.Contains(page))
             {
                 rbits[Pages.IndexOf(page)] = 1;
+                ClockArrow += 1;
             }
             else
             {
@@ -30,20 +46,20 @@ namespace CacheReplacementPolicies
                 {
                     Pages.Add(page);
                     rbits[Pages.IndexOf(page)] = 1;
+                    ClockArrow += 1;
                 }
                 else
                 {
-                    if (rbits[0] == 0)
+                    if (rbits[ClockArrow] == 0)
                     {
-                        Pages.RemoveAt(0);
-                        Pages.Add(page);
+                        Pages[ClockArrow] = page;
+                        rbits[ClockArrow] = 1;
+                        ClockArrow += 1;
                     }
                     else
                     {
-                        rbits.RemoveAt(0);
-                        rbits.Add(0);
-                        Pages.Add(Pages[0]);
-                        Pages.RemoveAt(0);
+                        rbits[ClockArrow] = 0;
+                        ClockArrow += 1;
                         AddPage(page);
                     }
                 }
