@@ -42,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheReplacementPolicy.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="Clock.cs" />
     <Compile Include="FIFO.cs" />
     <Compile Include="LRU.cs" />
