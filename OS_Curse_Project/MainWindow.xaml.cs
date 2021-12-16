@@ -19,7 +19,11 @@ namespace OS_Curse_Project
             DataContext = new MainVM(); // очень сильно нарушили mvvm
         }
 
-
+        /// <summary>
+        /// Функция для получения изображения графика
+        /// </summary>
+        /// <param name="dpi">Плонтность пикселей</param>
+        /// <returns>Массив пикселей с изображением графика</returns>
         public byte[] EncodeVisual(int dpi)
         {
             var visual = Chart123;
@@ -39,7 +43,9 @@ namespace OS_Curse_Project
             }
         }
 
-
+        /// <summary>
+        /// Экспорт данных об анализе в PDF файл
+        /// </summary>
         private void MenuItem_OnClick(object sender, RoutedEventArgs e)
         {
             var dlg = new SaveFileDialog();

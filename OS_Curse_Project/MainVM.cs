@@ -24,7 +24,9 @@ namespace OS_Curse_Project
     internal class MainVM : INotifyPropertyChanged
     {
         #region Constructors
-
+        /// <summary>
+        /// Стандартный конструктор ViewModel
+        /// </summary>
         public MainVM()
         {
             MinPage = 2;
@@ -63,7 +65,9 @@ namespace OS_Curse_Project
         #region Commands
 
         private RelayCommand showHelp;
-
+        /// <summary>
+        /// команда показывающая справку
+        /// </summary>
         public RelayCommand ShowHelp
         {
             get
@@ -77,7 +81,9 @@ namespace OS_Curse_Project
         }
 
         private RelayCommand saveInitialData;
-
+        /// <summary>
+        /// команда сохраняющая начальные данные
+        /// </summary>
         public RelayCommand SaveInitialData
         {
             get
@@ -98,7 +104,9 @@ namespace OS_Curse_Project
         }
 
         private RelayCommand readInitialData;
-
+        /// <summary>
+        /// Команда читающая данные из файла
+        /// </summary>
         public RelayCommand ReadInitialData
         {
             get
@@ -130,7 +138,9 @@ namespace OS_Curse_Project
                 }));
             }
         }
-
+        /// <summary>
+        /// Команда выполняет анализ алгоритмов
+        /// </summary>
         public RelayCommand StartCommand
         {
             get

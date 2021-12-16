@@ -6,7 +6,10 @@ namespace CacheReplacementPolicies
     {
         //надо чтобы получить от этого класса детей, потому что от класса с дженериком е получить нормально, ну или я не нашел как (я искал)
     }
-
+    /// <summary>
+    /// Абстрактный класс для создания алгоритма замещения страниц
+    /// </summary>
+    /// <typeparam name="T">Тип данных представляющий собой страницу</typeparam>
     public abstract class CacheReplacementPolicy<T> : CacheReplacementPolicy
     {
         /// <summary>

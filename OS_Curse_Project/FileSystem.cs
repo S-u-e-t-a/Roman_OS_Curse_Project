@@ -14,8 +14,17 @@ using iText.Layout.Properties;
 
 namespace OS_Curse_Project
 {
+    /// <summary>
+    ///     Класс для работы с файлами
+    /// </summary>
     internal static class FileSystem
     {
+        /// <summary>
+        ///     Экспортирует данные в формат PDF
+        /// </summary>
+        /// <param name="path">Путь к файлу</param>
+        /// <param name="bitmap">График </param>
+        /// <param name="results">Результаты анализа алгоритмов</param>
         public static void exportPdf(string path, byte[] bitmap, Dictionary<string, Dictionary<int, List<List<char>>>> results)
         {
             var writer = new PdfWriter(path);
@@ -85,7 +94,11 @@ namespace OS_Curse_Project
             document.Close();
         }
 
-
+        /// <summary>
+        /// Сохраняет данные в файл
+        /// </summary>
+        /// <param name="path"> Путь к файлу</param>
+        /// <param name="text">Данные для записи</param>
         public static void SaveToFile(string path, string text)
         {
             var fileWriter = new StreamWriter(path);
@@ -93,7 +106,11 @@ namespace OS_Curse_Project
             fileWriter.Close();
         }
 
-
+        /// <summary>
+        /// Читает данные из файла
+        /// </summary>
+        /// <param name="path">Путь к файлу</param>
+        /// <returns> Полученные из файла данные</returns>
         public static List<string> ReadFromFile(string path)
         {
             string[] stringSeparators = {"\r", "\n", "\t"};
