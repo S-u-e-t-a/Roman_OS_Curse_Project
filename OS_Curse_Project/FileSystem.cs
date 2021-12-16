@@ -94,8 +94,9 @@ namespace OS_Curse_Project
             document.Close();
         }
 
+
         /// <summary>
-        /// Сохраняет данные в файл
+        ///     Сохраняет данные в файл
         /// </summary>
         /// <param name="path"> Путь к файлу</param>
         /// <param name="text">Данные для записи</param>
@@ -106,8 +107,9 @@ namespace OS_Curse_Project
             fileWriter.Close();
         }
 
+
         /// <summary>
-        /// Читает данные из файла
+        ///     Читает данные из файла
         /// </summary>
         /// <param name="path">Путь к файлу</param>
         /// <returns> Полученные из файла данные</returns>

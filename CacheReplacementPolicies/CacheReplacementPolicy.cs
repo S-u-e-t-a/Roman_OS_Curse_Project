@@ -6,21 +6,28 @@ namespace CacheReplacementPolicies
     {
         //надо чтобы получить от этого класса детей, потому что от класса с дженериком е получить нормально, ну или я не нашел как (я искал)
     }
+
     /// <summary>
-    /// Абстрактный класс для создания алгоритма замещения страниц
+    ///     Абстрактный класс для создания алгоритма замещения страниц
     /// </summary>
     /// <typeparam name="T">Тип данных представляющий собой страницу</typeparam>
     public abstract class CacheReplacementPolicy<T> : CacheReplacementPolicy
     {
         /// <summary>
+        ///     Количество прерываний
+        /// </summary>
+        public int Interuptions;
+
+        /// <summary>
         ///     Количество страниц памяти в кэше
         /// </summary>
         protected int CountOfPages;
 
+
         /// <summary>
-        ///     Количество прерываний
+        ///     Текущие страницы в кэше
         /// </summary>
-        public int Interuptions;
+        public List<T> Pages { get; }
 
 
         public CacheReplacementPolicy(int countOfPages)
@@ -29,12 +36,6 @@ namespace CacheReplacementPolicies
             Pages = new List<T>();
             Interuptions = 0;
         }
-
-
-        /// <summary>
-        ///     Текущие страницы в кэше
-        /// </summary>
-        public List<T> Pages { get; }
 
 
         /// <summary>
