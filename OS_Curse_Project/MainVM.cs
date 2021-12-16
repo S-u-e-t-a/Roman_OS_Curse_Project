@@ -196,6 +196,7 @@ namespace OS_Curse_Project
                                        }
 
                                        serie.Values.Add(new ObservablePoint(i, policy.Interuptions));
+                                       serie.LineSmoothness = 0;
                                        var grid = new DataGrid(); // НАРУШАЕМ ПРИНЦИПЫ MVVM?????????????? ДА!
                                        grid.SetRowsSource(cachePages);
                                        grid.SetColumnHeadersSource(headers);
